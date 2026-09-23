@@ -9,14 +9,14 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: via-ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Use Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/namespace/setup-node@v4
         with:
-          node-version: 20
+        node-version: 20
 
       - name: Run test suite
         run: node test/temporal-core.test.cjs
