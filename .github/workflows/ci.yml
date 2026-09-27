@@ -20,3 +20,6 @@ jobs:
 
       - name: Run test suite
         run: node test/temporal-core.test.cjs
+
+      - name: Run inheritance suite
+        run: node test/inheritance.test.cjs

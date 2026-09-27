@@ -85,4 +85,67 @@ silently promoted.
 | 1 | unverified clock anchor; timezone-assumed journal reads; schedule-trim misdecision from misread time context |
 | 2 | hard-won laws evicted next to weather notes; restore-never-ends livelock; manual archive as only rescue |
 | 3 | 50-cap silent truncation on journal reads; reconstruction believed complete when it held a prefix |
-| 4 | succession plan (token 0 → token 1) with no portable format behind it |
+| 4 | succession plan (token 0 → token 1) with no portable format behind it |---
+
+# Delta v0.2 — provenance-carrying inheritance (P5 hardening)
+
+Provenance: same lineage as v0.1 (desk scar-derived, principal-reviewed). This
+delta closes the gap v0.1 left open: an envelope proves WHO a note came from
+and WHAT authority it carries, but not whether the receiving agent LIVED it.
+An inheritance plan where a successor cannot tell lived knowledge from handed
+knowledge repeats its predecessor's paid-for mistakes while mis-trusting its
+own real scars. No trading logic, no autonomous-authority change.
+
+## Law: every entry carries provenance
+
+Two kinds, both required, absence never defaulting to "self":
+
+- `EXPERIENCED_BY_SELF` — this agent lived the event behind the entry.
+- `INHERITED_FROM_PREDECESSOR` — the entry arrived from another agent.
+
+Provenance is a first-class field inside the digest chain: tampering with it
+breaks the envelope exactly like tampering with content. Inherited entries
+must additionally name their source (`origin.predecessorId`) and arrival time
+(`origin.receivedAt`) — inherited knowledge names where and when it arrived.
+
+## Law: ARRIVED = INHERITED
+
+Anything crossing an envelope boundary into a new agent is inherited, whatever
+the bytes claim about themselves. Import never upgrades provenance — history
+is never rewritten as firsthand. A v0.1 envelope (schemaVersion 1) carries no
+provenance proof, so every entry it carries arrives
+`INHERITED_FROM_PREDECESSOR` with origin filled from the envelope's
+inheritance block (or `unknown`); a self-claim smuggled into a v1 entry's
+bytes is ignored — arrival is the proof, not the payload.
+
+## Law: inherited knowledge scores lower until re-earned
+
+`importanceScoreV2` = v0.1 importance, then:
+
+- `INHERITED_FROM_PREDECESSOR`: −25
+- inherited AND `unverified` authority: additional −15
+
+Floor at 0. The penalty is not distrust of the predecessor — it is an
+economy: knowledge re-earned by THIS agent (re-demonstrated, re-scarred)
+recovers its weight; handed knowledge stays cheap until it is lived.
+
+## API (additive module, v0.1 core untouched)
+
+- `PROVENANCE_KINDS`, `ENVELOPE_SCHEMA_VERSION_V2 = 2`
+- `importanceScoreV2(entry)` — throws on missing/unknown provenance
+- `exportEnvelopeV2(entries, continuity, inheritance)` — provenance required
+  on every entry; inherited entries must carry complete origin; emits
+  schemaVersion 2 with an `inheritance` block (predecessorId, transferredAt,
+  note)
+- `importEnvelopeV2(envelope, opts)` — accepts v1 AND v2 envelopes, verifies
+  the digest chain per schema, preserves authority classes AND provenance
+  exactly, marks every imported entry `provenancePreserved` /
+  `authorityClassPreserved`; v1 entries arrive inherited
+
+## Acceptance
+
+22 checks in `test/inheritance.test.cjs`: provenance required (2), scoring
+invariants incl. base-independent double-penalty (4), export origin gates (2),
+round-trip preservation (5), provenance-tamper breaks chain (1), v1-arrives-
+inherited incl. smuggled self-claim ignored (6), bad schema refused (1),
+score floor (1). v0.1 suite unchanged and green (32 checks).
