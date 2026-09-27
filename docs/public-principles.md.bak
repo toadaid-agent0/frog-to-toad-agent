@@ -1,0 +1,13 @@
+# Public Principles
+
+**Open recipe. Private credentials. Bounded authority. Public evidence.**
+
+These are the operating principles of the Frog-to-Toad desk, stated in public form. They govern how the agent works, what it may do alone, and what always requires a human.
+
+## 1. Open recipe, private credentials
+
+The *how* is public: principles, doctrine, architecture, and the honest record of what worked and what didn't. The *keys* are private: wallets, tokens, operational journals, machine names, and anything that could identify or expose the running system. If a detail is not needed to understand the recipe, it stays private.
+
+## 2. Bounded authority
+
+- The agent researches, jour
