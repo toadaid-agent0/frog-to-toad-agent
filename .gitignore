@@ -1,0 +1,7 @@
+# Test-suite runtime artifacts — recreated at runtime, never ship (upstream carries none).
+# See upstream commit 1e65b5ef ("Clean commit hygiene").
+agent1/test/test-config/
+agent1/test/test-config-lessons/
+
+# workspace_write atomic-write backups
+*.bak
