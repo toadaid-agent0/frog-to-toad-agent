@@ -23,3 +23,6 @@ jobs:
 
       - name: Run inheritance suite
         run: node test/inheritance.test.cjs
+
+      - name: Run stage0 suite
+        run: node test/stage0.test.cjs
